@@ -1,31 +1,48 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import Hello from './Hello';
-import './style.css';
+import React, { Component } from "react";
+import { render } from "react-dom";
+import Hello from "./Hello";
+import "./style.css";
 
-interface AppProps { }
+interface AppProps {}
 interface AppState {
-  name: string;
+  value: number;
 }
 
 class App extends Component<AppProps, AppState> {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'React'
+      value: 0
     };
+  }
+
+  keyDownHandler = (e: { keyCode: number }) => {
+    if (this.state.value != null) {
+      if (e.keyCode === 38) {
+        this.setState({ value: this.state.value + 1 });
+      }
+      if (e.keyCode === 40) {
+        this.setState({ value: this.state.value - 1 });
+      }
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.keyDownHandler);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.keyDownHandler);
   }
 
   render() {
     return (
       <div>
-        <Hello name={this.state.name} />
-        <p>
-          Start editing to see some magic happen :)
-        </p>
+        <h1>Counter is: {this.state.value} </h1>
+        <p>Start editing to see some magic happen :)</p>
       </div>
     );
   }
 }
 
-render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById("root"));
